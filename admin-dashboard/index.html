@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waste2Farm — Admin Dashboard</title>
+  <meta name="description" content="Admin panel for managing Waste2Farm circular economy marketplace">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">🌱</div>
+      <h1>Waste2Farm</h1>
+      <span class="badge">Admin</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-section="overview" id="nav-overview">
+        <span class="nav-icon">📊</span> Overview
+      </a>
+      <a href="#" class="nav-item" data-section="users" id="nav-users">
+        <span class="nav-icon">👥</span> Users
+      </a>
+      <a href="#" class="nav-item" data-section="listings" id="nav-listings">
+        <span class="nav-icon">♻️</span> Listings
+      </a>
+      <a href="#" class="nav-item" data-section="orders" id="nav-orders">
+        <span class="nav-icon">📦</span> Orders
+      </a>
+      <a href="#" class="nav-item" data-section="analytics" id="nav-analytics">
+        <span class="nav-icon">📈</span> Analytics
+      </a>
+      <a href="#" class="nav-item" data-section="revenue" id="nav-revenue">
+        <span class="nav-icon">💰</span> Revenue
+      </a>
+      <a href="#" class="nav-item" data-section="cities" id="nav-cities">
+        <span class="nav-icon">🏙️</span> Cities
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-profile">
+        <div class="avatar">SA</div>
+        <div>
+          <p class="admin-name">Super Admin</p>
+          <p class="admin-role">admin@waste2farm.in</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <div>
+          <h2 class="page-title" id="pageTitle">Overview</h2>
+          <p class="page-subtitle">Welcome back! Here's what's happening today.</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="search-box">
+          <input type="text" placeholder="Search users, orders..." id="globalSearch">
+        </div>
+        <button class="notification-btn" id="notifBtn">🔔<span class="notif-badge">3</span></button>
+      </div>
+    </header>
+
+    <!-- Overview Section -->
+    <section class="content-section active" id="section-overview">
+      <!-- KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon green">👥</div>
+          <div class="kpi-info">
+            <span class="kpi-value" id="totalUsers">12,847</span>
+            <span class="kpi-label">Total Users</span>
+            <span class="kpi-trend up">↑ 12.5%</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon blue">📦</div>
+          <div class="kpi-info">
+            <span class="kpi-value" id="totalOrders">8,342</span>
+            <span class="kpi-label">Total Orders</span>
+            <span class="kpi-trend up">↑ 8.2%</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon purple">♻️</div>
+          <div class="kpi-info">
+            <span class="kpi-value" id="wasteDiverted">156 tons</span>
+            <span class="kpi-label">Waste Diverted</span>
+            <span class="kpi-trend up">↑ 23.1%</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon orange">💰</div>
+          <div class="kpi-info">
+            <span class="kpi-value" id="totalRevenue">₹24.5L</span>
+            <span class="kpi-label">Revenue</span>
+            <span class="kpi-trend up">↑ 15.7%</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon teal">🌿</div>
+          <div class="kpi-info">
+            <span class="kpi-value" id="carbonSaved">78 tons</span>
+            <span class="kpi-label">Carbon Saved</span>
+            <span class="kpi-trend up">↑ 19.4%</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon red">🚛</div>
+          <div class="kpi-info">
+            <span class="kpi-value" id="activeDrivers">342</span>
+            <span class="kpi-label">Active Drivers</span>
+            <span class="kpi-trend up">↑ 5.1%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>Orders & Revenue Trend</h3>
+          <canvas id="ordersChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Waste by Type</h3>
+          <canvas id="wasteTypeChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Recent Orders Table -->
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Recent Orders</h3>
+          <button class="btn btn-sm" id="viewAllOrders">View All</button>
+        </div>
+        <table class="data-table" id="recentOrdersTable">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Buyer</th>
+              <th>Waste Type</th>
+              <th>Quantity</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>City</th>
+            </tr>
+          </thead>
+          <tbody id="recentOrdersBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Users Section -->
+    <section class="content-section" id="section-users">
+      <div class="section-header">
+        <h3>User Management</h3>
+        <div class="section-actions">
+          <select id="userRoleFilter" class="filter-select">
+            <option value="">All Roles</option>
+            <option value="generator">Generators</option>
+            <option value="buyer">Buyers</option>
+            <option value="driver">Drivers</option>
+            <option value="admin">Admins</option>
+          </select>
+          <button class="btn btn-primary" id="addUserBtn">+ Add User</button>
+        </div>
+      </div>
+      <div class="table-card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>City</th>
+              <th>Orders</th>
+              <th>Rating</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Listings Section -->
+    <section class="content-section" id="section-listings">
+      <div class="section-header">
+        <h3>Waste Listings</h3>
+        <div class="section-actions">
+          <select id="listingTypeFilter" class="filter-select">
+            <option value="">All Types</option>
+            <option value="vegetable">Vegetable</option>
+            <option value="fruit">Fruit</option>
+            <option value="food">Food</option>
+            <option value="garden">Garden</option>
+            <option value="dairy">Dairy</option>
+          </select>
+          <select id="listingStatusFilter" class="filter-select">
+            <option value="">All Status</option>
+            <option value="available">Available</option>
+            <option value="sold">Sold</option>
+            <option value="expired">Expired</option>
+          </select>
+        </div>
+      </div>
+      <div class="listings-grid" id="listingsGrid"></div>
+    </section>
+
+    <!-- Orders Section -->
+    <section class="content-section" id="section-orders">
+      <div class="section-header">
+        <h3>Order Management</h3>
+        <div class="section-actions">
+          <select id="orderStatusFilter" class="filter-select">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="picked_up">Picked Up</option>
+            <option value="delivered">Delivered</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Buyer</th>
+              <th>Generator</th>
+              <th>Driver</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Analytics Section -->
+    <section class="content-section" id="section-analytics">
+      <div class="section-header">
+        <h3>Sustainability Analytics</h3>
+        <select id="analyticsCity" class="filter-select">
+          <option value="">All Cities</option>
+          <option value="Hyderabad">Hyderabad</option>
+          <option value="Bangalore">Bangalore</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Chennai">Chennai</option>
+        </select>
+      </div>
+      <div class="impact-cards">
+        <div class="impact-card green-glow">
+          <div class="impact-value" id="impactWaste">156</div>
+          <div class="impact-unit">tons</div>
+          <div class="impact-label">Waste Diverted from Landfill</div>
+        </div>
+        <div class="impact-card blue-glow">
+          <div class="impact-value" id="impactCarbon">78</div>
+          <div class="impact-unit">tons CO₂</div>
+          <div class="impact-label">Carbon Emissions Saved</div>
+        </div>
+        <div class="impact-card purple-glow">
+          <div class="impact-value" id="impactWater">390K</div>
+          <div class="impact-unit">liters</div>
+          <div class="impact-label">Water Saved</div>
+        </div>
+        <div class="impact-card orange-glow">
+          <div class="impact-value" id="impactFarmers">1,245</div>
+          <div class="impact-unit">farmers</div>
+          <div class="impact-label">Farmers Supported</div>
+        </div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <h3>Monthly Waste Collection Trend</h3>
+          <canvas id="wasteCollectionChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Carbon Savings Over Time</h3>
+          <canvas id="carbonChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Revenue Section -->
+    <section class="content-section" id="section-revenue">
+      <div class="section-header"><h3>Revenue Dashboard</h3></div>
+      <div class="kpi-grid small">
+        <div class="kpi-card">
+          <div class="kpi-info">
+            <span class="kpi-value">₹24.5L</span>
+            <span class="kpi-label">Total Revenue</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-info">
+            <span class="kpi-value">₹1.2L</span>
+            <span class="kpi-label">Platform Fees</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-info">
+            <span class="kpi-value">₹2,940</span>
+            <span class="kpi-label">Avg Order Value</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-info">
+            <span class="kpi-value">₹3.8L</span>
+            <span class="kpi-label">Driver Payouts</span>
+          </div>
+        </div>
+      </div>
+      <div class="chart-card full-width">
+        <h3>Revenue Breakdown</h3>
+        <canvas id="revenueChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Cities Section -->
+    <section class="content-section" id="section-cities">
+      <div class="section-header">
+        <h3>City Expansion</h3>
+        <button class="btn btn-primary" id="addCityBtn">+ Add City</button>
+      </div>
+      <div class="cities-grid" id="citiesGrid"></div>
+    </section>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

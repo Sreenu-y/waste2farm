@@ -1,0 +1,22 @@
+{
+  "name": "waste2farm",
+  "version": "1.0.0",
+  "description": "Waste2Farm — Circular economy marketplace connecting waste generators with farmers",
+  "private": true,
+  "workspaces": [
+    "services/*",
+    "admin-dashboard"
+  ],
+  "scripts": {
+    "dev": "node dev.js",
+    "seed": "node scripts/seed.js",
+    "test:api": "node scripts/test-api.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "mongoose": "^8.23.0"
+  }
+}
