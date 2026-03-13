@@ -31,7 +31,7 @@
 
 ### 1. Clone & Configure
 ```bash
-git clone https://github.com/your-org/waste2farm.git
+git clone https://github.com/Sreenu-y/waste2farm.git
 cd waste2farm
 cp .env.example .env
 # Edit .env with your credentials
